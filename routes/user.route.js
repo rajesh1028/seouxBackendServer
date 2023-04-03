@@ -2,14 +2,11 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-// const {client} =require("../services/redis-client")
 
 const cookieParser = require("cookie-parser");
 const fs = require("fs");
 const { UserModel } = require("../models/user.model");
 
-const { mailfun } = require("../middlewares/mail");
-// const { json } = require('express');
 
 const userRouter = express.Router();
 userRouter.use(cookieParser());
@@ -19,15 +16,15 @@ userRouter.get("/getUsers", async (req, res) => {
   res.json(users);
 });
 
-userRouter.post("/otp", mailfun, async (req, res) => {
-  // const { name, email, pass } = req.body
-  // const user = await UserModel.findOne({ email })
-  // if (user) {
-  //     res.json("already exists")
-  // } else {
-  //     res.json("otp generated")
-  // }
-});
+// userRouter.post("/otp", mailfun, async (req, res) => {
+//   // const { name, email, pass } = req.body
+//   // const user = await UserModel.findOne({ email })
+//   // if (user) {
+//   //     res.json("already exists")
+//   // } else {
+//   //     res.json("otp generated")
+//   // }
+// });
 
 userRouter.post("/signup", async (req, res) => {
   try {
@@ -132,15 +129,15 @@ userRouter.get("/logout", (req, res) => {
   res.json("logout successfully");
 });
 
-userRouter.post("/otppass", mailfun, async (req, res) => {
-  const { name, email, pass, role } = req.body;
-  const user = await UserModel.findOne({ email });
-  if (user) {
-    res.json("otp generated");
-  } else {
-    res.json("already exists");
-  }
-});
+// userRouter.post("/otppass", mailfun, async (req, res) => {
+//   const { name, email, pass, role } = req.body;
+//   const user = await UserModel.findOne({ email });
+//   if (user) {
+//     res.json("otp generated");
+//   } else {
+//     res.json("already exists");
+//   }
+// });
 
 userRouter.patch("/update", async (req, res) => {
   // const cotp = req.cookies.otp
