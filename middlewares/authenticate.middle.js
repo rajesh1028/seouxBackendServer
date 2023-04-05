@@ -1,6 +1,10 @@
+const express = require('express')
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require("dotenv").config()
+const cookieParser = require('cookie-parser');
 const fs = require('fs');
+// const { client } = require('../services/redis-client');
 
 const authenticate = async (req, res, next) => {
     try {
