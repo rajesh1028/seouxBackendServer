@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser");
 const fs = require("fs");
 const { UserModel } = require("../models/user.model");
 
-const { mailfun } = require("../middlewares/mail");
+// const { mailfun } = require("../middlewares/mail");
 // const { json } = require('express');
 
 const userRouter = express.Router();
@@ -19,7 +19,7 @@ userRouter.get("/getUsers", async (req, res) => {
   res.json(users);
 });
 
-userRouter.post("/otp", mailfun, async (req, res) => {
+userRouter.post("/otp", async (req, res) => {
   // const { name, email, pass } = req.body
   // const user = await UserModel.findOne({ email })
   // if (user) {
@@ -132,7 +132,7 @@ userRouter.get("/logout", (req, res) => {
   res.json("logout successfully");
 });
 
-userRouter.post("/otppass", mailfun, async (req, res) => {
+userRouter.post("/otppass", async (req, res) => {
   const { name, email, pass, role } = req.body;
   const user = await UserModel.findOne({ email });
   if (user) {
