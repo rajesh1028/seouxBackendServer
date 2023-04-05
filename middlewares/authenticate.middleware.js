@@ -1,10 +1,6 @@
-const express = require('express')
-const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require("dotenv").config()
-const cookieParser = require('cookie-parser');
 const fs = require('fs');
-// const { client } = require('../services/redis-client');
 
 const authenticate = async (req, res, next) => {
     try {
@@ -12,7 +8,6 @@ const authenticate = async (req, res, next) => {
         console.log(token)
 
         const data = JSON.parse(fs.readFileSync("./blacklist.json", "utf-8"))
-        // const data= await client.LRANGE("blacktok",0,-1)
 
         if (data.includes(token)) {
             res.send("login again ")
@@ -21,8 +16,6 @@ const authenticate = async (req, res, next) => {
                 const decoded = jwt.verify(token, process.env.normalkey)
                 if (decoded) {
                     res.locals.userId = decoded.userId;
-                    // const userrole=decoded.role
-                    // req.headers.userrole=userrole
                     next()
                 } else {
                     res.send({msg:"login again",status:"faild"})

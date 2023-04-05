@@ -2,14 +2,10 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-// const {client} =require("../services/redis-client")
 
 const cookieParser = require("cookie-parser");
 const fs = require("fs");
 const { UserModel } = require("../models/user.model");
-
-// const { mailfun } = require("../middlewares/mail");
-// const { json } = require('express');
 
 const userRouter = express.Router();
 userRouter.use(cookieParser());
@@ -21,17 +17,13 @@ userRouter.get("/getUsers", async (req, res) => {
 
 userRouter.post("/signup", async (req, res) => {
   try {
-    // const cotp = req.cookies.otp;
-    // const ootp=res.locals.otp
-    const { name, pass, email, age, gender, otp } = req.body;
-    // console.log(otp)
-    // console.log(req.cookies)
+    const { name, pass, email, age, gender } = req.body;
+
     const already = await UserModel.findOne({ email });
     console.log(already);
     if (already) {
       res.json("user already exists");
     } else {
-      // if (true) {
       bcrypt.hash(pass, 5, async (err, hashpass) => {
         if (err) {
           res.json("error while hashing password");
@@ -43,19 +35,16 @@ userRouter.post("/signup", async (req, res) => {
             age,
             gender,
           });
-          // user.save()
           res.json({ msg: "registration sucessfull" });
-          // console.log(user)
         }
       });
-      // } else {
-      //     res.json("wrong otp")
-      // }
     }
   } catch (error) {
     console.log(error);
   }
 });
+
+
 userRouter.post("/login", async (req, res) => {
   const { pass, email } = req.body;
   const user = await UserModel.findOne({ email });
@@ -83,17 +72,14 @@ userRouter.post("/login", async (req, res) => {
       }
     });
   }
-  // res.send(user);
 });
 
 
 userRouter.get("/logout", (req, res) => {
   console.log("logout successfully");
   let kk = req.cookies.normaltoken;
-  // console.log(req.cookies)
   let fil = fs.readFileSync("./blacklist.json", "utf-8");
   let data = JSON.parse(fil);
-  //   console.log(kk)
   data.push(kk);
   fs.writeFileSync("./blacklist.json", JSON.stringify(data));
 
@@ -101,34 +87,19 @@ userRouter.get("/logout", (req, res) => {
   res.json("logout successfully");
 });
 
-// userRouter.post("/otppass", async (req, res) => {
-//   const { name, email, pass, role } = req.body;
-//   const user = await UserModel.findOne({ email });
-//   if (user) {
-//     res.json("otp generated");
-//   } else {
-//     res.json("already exists");
-//   }
-// });
 
 userRouter.patch("/update", async (req, res) => {
-  // const cotp = req.cookies.otp
-  // const { Id } = req.params
+
   const { email, pass } = req.body;
-  // const newtoken = req.cookies.normaltoken
+
   const data = await UserModel.findOne({ email: email });
-  // const { name, pass, email } = req.body
+
   console.log(pass);
-  // console.log(otp, cotp)
+
   try {
-    // if (cotp != otp) {
-    //     res.json("wrong otp")
-    // }
-    // else if (cotp == otp) {
-    // /////////////////////////////////////////////////////////////////////////////////////////////////////
+
     bcrypt.hash(pass, 5, async (err, hashpass) => {
       if (err) {
-        // res.json("error while hashing password")
         res.json(err);
         console.log(err);
       } else {
@@ -140,20 +111,12 @@ userRouter.patch("/update", async (req, res) => {
         res.json("password updated");
       }
     });
-    ////////////////////////////////////////////////////////////////////////////
-    // }
+
   } catch (error) {
     console.log(error);
     console.log("something went wrong");
   }
 });
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// userRouter.get('/logout', (req, res) => {
 
-//       let kk = req.cookies.normaltoken
-//       client.LPUSH("blacktok",kk)
-//       res.send("logout successfully")
-//       console.log("logout successfully")
-// })
 module.exports = { userRouter };
