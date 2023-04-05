@@ -19,16 +19,6 @@ userRouter.get("/getUsers", async (req, res) => {
   res.json(users);
 });
 
-userRouter.post("/otp", async (req, res) => {
-  // const { name, email, pass } = req.body
-  // const user = await UserModel.findOne({ email })
-  // if (user) {
-  //     res.json("already exists")
-  // } else {
-  //     res.json("otp generated")
-  // }
-});
-
 userRouter.post("/signup", async (req, res) => {
   try {
     // const cotp = req.cookies.otp;
@@ -95,29 +85,8 @@ userRouter.post("/login", async (req, res) => {
   }
   // res.send(user);
 });
-// userRouter.post("/newtoken", (req, res) => {
-//     try {
-//         const newtoken = req.cookies.refreshtoken
-//         // console.log(newtoken)
 
-//         if (!newtoken) {
-//             res.json("no token")
-//         } else {
-//             jwt.verify(newtoken, process.env.refreshkey, (err, decoded) => {
-//                 if (err) {
-//                     res.json("invalid token")
-//                 } else {
 
-//                     var normaltoken = jwt.sign({ userId: decoded.userId }, process.env.normalkey, { expiresIn: "1h" });
-//                     res.cookie("normaltoken", normaltoken, { httpOnly: true, maxAge: 1000000 }).cookie("refreshtoken", newtoken, { httpOnly: true, maxAge: 100000 })
-//                     res.json("new token generated successfully")
-//                 }
-//             })
-//         }
-//     } catch (error) {
-//         console.log(error)
-//     }
-// })
 userRouter.get("/logout", (req, res) => {
   console.log("logout successfully");
   let kk = req.cookies.normaltoken;
@@ -132,15 +101,15 @@ userRouter.get("/logout", (req, res) => {
   res.json("logout successfully");
 });
 
-userRouter.post("/otppass", async (req, res) => {
-  const { name, email, pass, role } = req.body;
-  const user = await UserModel.findOne({ email });
-  if (user) {
-    res.json("otp generated");
-  } else {
-    res.json("already exists");
-  }
-});
+// userRouter.post("/otppass", async (req, res) => {
+//   const { name, email, pass, role } = req.body;
+//   const user = await UserModel.findOne({ email });
+//   if (user) {
+//     res.json("otp generated");
+//   } else {
+//     res.json("already exists");
+//   }
+// });
 
 userRouter.patch("/update", async (req, res) => {
   // const cotp = req.cookies.otp
